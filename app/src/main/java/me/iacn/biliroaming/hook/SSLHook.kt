@@ -163,6 +163,18 @@ class SSLHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                 null
             }
         }
+
+        "org.chromium.net.ExperimentalCronetEngine\$Builder".findClassOrNull(mClassLoader)?.run {
+            hookAfterAllConstructors {
+                it.thisObject.callMethod("enablePublicKeyPinningBypassForLocalTrustAnchors", true)
+            }
+            hookBeforeMethod(
+                "enablePublicKeyPinningBypassForLocalTrustAnchors",
+                Boolean::class.javaPrimitiveType
+            ) {
+                it.args[0] = true
+            }
+        }
     }
 
 }
