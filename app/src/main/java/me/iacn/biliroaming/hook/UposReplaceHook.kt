@@ -1,5 +1,6 @@
 package me.iacn.biliroaming.hook
 
+import android.net.Uri
 import me.iacn.biliroaming.utils.Log
 import me.iacn.biliroaming.utils.UposReplaceHelper.enableLivePcdnBlock
 import me.iacn.biliroaming.utils.UposReplaceHelper.enablePcdnBlock
@@ -76,6 +77,12 @@ class UposReplaceHook(classLoader: ClassLoader) : BaseHook(classLoader) {
             if (backupUrls.isNotEmpty()) {
                 mediaAssertSegment?.setObjectField("url", rawUrl.replaceUpos())
                 listOf(rawUrl.replaceUpos(videoUposBackups[0], rawUrl.isOverseaUpos()), baseUrl)
+            } else if (baseUrl.contains(".mcdn.bilivideo")) {
+                val newBaseUrl =
+                    Uri.Builder().scheme("https").authority("proxy-tf-all-ws.bilivideo.com")
+                        .appendQueryParameter("url", baseUrl).build().toString()
+                mediaAssertSegment?.setObjectField("url", newBaseUrl)
+                emptyList()
             } else emptyList()
         } else {
             if (enablePcdnBlock || forceUpos || backupUrls.isEmpty() || rawUrl.isOverseaUpos()) {
