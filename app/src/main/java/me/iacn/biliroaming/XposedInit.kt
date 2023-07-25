@@ -85,6 +85,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                     BiliBiliPackage(lpparam.classLoader, param.args[0] as Context)
                     if (BuildConfig.DEBUG) {
+                        startHook(TestHook(lpparam.classLoader))
                         startHook(SSLHook(lpparam.classLoader))
                         startHook(MossDebugHook(lpparam.classLoader))
                         startHook(OkHttpDebugHook(lpparam.classLoader))
