@@ -66,6 +66,13 @@ message OkHttp {
   optional Class callback = 7;
 }
 
+message Okio2 {
+  optional Class class = 1;
+  optional Class buffered_source = 2;
+  optional Method source = 3;
+  optional Method source_buffer = 4;
+}
+
 message FastJson {
   optional Class class = 1;
   optional Method parse = 2;
@@ -312,6 +319,7 @@ message AppUpgrade {
 message HookInfo {
   int64 last_update_time = 1;
   optional AppUpgrade app_upgrade = 500;
+  optional Okio2 okio2 = 600;
   optional MapIds map_ids = 2;
   int32 client_version_code = 3;
   int32 module_version_code = 4;

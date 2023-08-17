@@ -151,6 +151,8 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
     val responseBodyClass by Weak { mHookInfo.okHttp.responseBody.class_ from mClassLoader }
     val mediaTypeClass by Weak { mHookInfo.okHttp.mediaType.class_ from mClassLoader }
     val callbackClass by Weak { mHookInfo.okHttp.callback from mClassLoader }
+    val okioClass by Weak { mHookInfo.okio2.class_ from mClassLoader }
+    val bufferedSourceClass by Weak { mHookInfo.okio2.bufferedSource from mClassLoader }
     val biliCallClass by Weak { mHookInfo.biliCall.class_ from mClassLoader }
     val parserClass by Weak { mHookInfo.biliCall.parser from mClassLoader }
     val livePagerRecyclerViewClass by Weak { mHookInfo.livePagerRecyclerView from mClassLoader }
@@ -343,6 +345,10 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
     fun bodySource() = mHookInfo.okHttp.responseBody.source.orNull
 
     fun get() = mHookInfo.okHttp.mediaType.get.orNull
+
+    fun source() = mHookInfo.okio2.source.orNull
+
+    fun sourceBuffer() = mHookInfo.okio2.sourceBuffer.orNull
 
     fun setParser() = mHookInfo.biliCall.setParser.orNull
 
@@ -813,6 +819,35 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
                     get = method { name = headerGetMethod.name }
                 }
                 callback = class_ { name = enqueueMethod.parameterTypes.first().name }
+            }
+            okio2 = okio2 {
+                val okioClass = "okio.Okio".from(classloader)
+                    ?: dexHelper.findMethodUsingString(
+                        "getsockname failed",
+                        false,
+                        -1,
+                        -1,
+                        null,
+                        -1,
+                        null,
+                        null,
+                        null,
+                        false
+                    ).asSequence().firstNotNullOfOrNull {
+                        dexHelper.decodeMethodIndex(it).takeIf { m ->
+                            m != null && m.isFinal
+                        }
+                    }?.declaringClass ?: return@okio2
+                class_ = class_ { name = okioClass.name }
+                val sourceMethod = okioClass.methods.find {
+                    it.parameterTypes.size == 1 && it.parameterTypes[0] == InputStream::class.java
+                } ?: return@okio2
+                val sourceBufferMethod = okioClass.methods.find {
+                    it.parameterTypes.size == 1 && it.parameterTypes[0] == sourceMethod.returnType
+                } ?: return@okio2
+                bufferedSource = class_ { name = sourceBufferMethod.returnType.name }
+                source = method { name = sourceMethod.name }
+                sourceBuffer = method { name = sourceBufferMethod.name }
             }
             fastJson = fastJson {
                 val fastJsonClass = dexHelper.findMethodUsingString(
