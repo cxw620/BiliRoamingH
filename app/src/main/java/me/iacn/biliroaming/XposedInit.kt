@@ -98,6 +98,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     startHook(TextFoldHook(lpparam.classLoader))
                     startHook(PlaybackSpeedHook(lpparam.classLoader))
                     startHook(FavFolderDialogHook(lpparam.classLoader))
+                    startHook(ChannelTabUIHook(lpparam.classLoader))
                     startHook(HintHook(lpparam.classLoader))
                     startHook(BangumiSeasonHook(lpparam.classLoader))
                     startHook(BangumiPlayUrlHook(lpparam.classLoader))
