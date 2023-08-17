@@ -1,4 +1,6 @@
 <resources>
     <string name="pref_description_title">说明</string>
     <string name="pref_description_summary">本模組與原版保持同步更新，並額外添加一些功能，這些功能帶有 H 字樣。\n內建使用可在應用內收到新的內建版更新。\n注意：本模組繼承於已處於 Archived 狀態的 BiliRoamingX Repo，保留了其大部分額外功能。</string>
+    <string name="block_follow_button_title">隱藏關注按鈕</string>
+    <string name="block_follow_button_summary">隱藏評論、動態等右上角的關注按鈕</string>
 </resources>
