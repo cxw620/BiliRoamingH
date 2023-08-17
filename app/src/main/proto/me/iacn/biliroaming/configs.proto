@@ -360,6 +360,11 @@ message PlaybackSpeed {
   repeated TripleSpeedService triple_speed_service = 10;
 }
 
+message FavFolderDialog {
+  optional Class class = 1;
+  optional Field check_box = 2;
+}
+
 message HookInfo {
   int64 last_update_time = 1;
   optional AppUpgrade app_upgrade = 500;
@@ -367,6 +372,7 @@ message HookInfo {
   optional blConfig bl_config = 601;
   optional Method set_line_to_all_count = 602;
   optional PlaybackSpeed playback_speed = 603;
+  optional FavFolderDialog fav_folder_dialog = 604;
   optional MapIds map_ids = 2;
   int32 client_version_code = 3;
   int32 module_version_code = 4;

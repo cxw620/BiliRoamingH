@@ -20,4 +20,6 @@
     <string name="default_playback_speed_hint">例如：1.5，空表示預設</string>
     <string name="long_press_playback_speed_title">長按播放速度</string>
     <string name="long_press_playback_speed_summary">自訂播放器長按播放速度</string>
+    <string name="disable_auto_subscribe_title">禁止自動訂閱合集</string>
+    <string name="disable_auto_subscribe_summary">禁止收藏有合集的影片時自動勾選訂閱合集</string>
 </resources>
