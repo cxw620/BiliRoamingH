@@ -317,6 +317,11 @@
             android:key="hidden"
             android:summary="@string/hidden_summary"
             android:title="@string/hidden_title" />
+        <SwitchPreference
+            android:dependency="hidden"
+            android:key="add_channel"
+            android:summary="@string/add_channel_summary"
+            android:title="@string/add_channel_title" />
         <Preference
             android:dependency="hidden"
             android:key="home_filter"
