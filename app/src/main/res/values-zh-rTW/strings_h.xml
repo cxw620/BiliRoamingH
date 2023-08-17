@@ -3,4 +3,10 @@
     <string name="pref_description_summary">本模組與原版保持同步更新，並額外添加一些功能，這些功能帶有 H 字樣。\n內建使用可在應用內收到新的內建版更新。\n注意：本模組繼承於已處於 Archived 狀態的 BiliRoamingX Repo，保留了其大部分額外功能。</string>
     <string name="block_follow_button_title">隱藏關注按鈕</string>
     <string name="block_follow_button_summary">隱藏評論、動態等右上角的關注按鈕</string>
+    <string name="text_fold_title">文字摺疊控制</string>
+    <string name="text_fold_summary">支持自訂評論及動態開始摺疊的文字行數</string>
+    <string name="text_fold_comment_max_lines_title">評論開始摺疊行數</string>
+    <string name="text_fold_dyn_max_lines_title">動態開始摺疊行數</string>
+    <string name="text_fold_dyn_lines_to_all_title">動態全文閱讀觸發行數</string>
+    <string name="text_fold_line">%1$s行</string>
 </resources>

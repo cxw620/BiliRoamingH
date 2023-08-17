@@ -3,4 +3,10 @@
     <string name="pref_description_summary">本模块与原版保持同步更新，并额外添加一些功能，这些功能带有 H 字样。\n内置使用可在应用内收到新的内置版更新。\n注意：本模块继承于已处于 Archived 状态的 BiliRoamingX 项目，保留了其大部分额外功能。</string>
     <string name="block_follow_button_title">隐藏关注按钮</string>
     <string name="block_follow_button_summary">隐藏评论、动态等右上角的关注按钮</string>
+    <string name="text_fold_title">文本折叠控制</string>
+    <string name="text_fold_summary">支持自定义评论及动态开始折叠的文本行数</string>
+    <string name="text_fold_comment_max_lines_title">评论开始折叠行数</string>
+    <string name="text_fold_dyn_max_lines_title">动态开始折叠行数</string>
+    <string name="text_fold_dyn_lines_to_all_title">动态全文阅读触发行数</string>
+    <string name="text_fold_line">%1$s行</string>
 </resources>
