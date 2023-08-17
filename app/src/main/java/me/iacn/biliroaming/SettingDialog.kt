@@ -67,6 +67,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             "playback_speed_override",
             "default_playback_speed",
             "long_press_playback_speed",
+            "disable_auto_subscribe",
         )
         private var searchItems = listOf<SearchItem>()
 
