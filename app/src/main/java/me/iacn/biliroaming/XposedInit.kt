@@ -129,6 +129,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     startHook(WebViewHook(lpparam.classLoader))
                     startHook(P2pHook(lpparam.classLoader))
                     startHook(DanmakuHook(lpparam.classLoader))
+                    startHook(BlConfigHook(lpparam.classLoader))
                     startHook(BangumiPageAdHook(lpparam.classLoader))
                     startHook(VideoQualityHook(lpparam.classLoader))
                     startHook(PublishToFollowingHook(lpparam.classLoader))

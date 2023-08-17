@@ -238,6 +238,11 @@ message UpdateInfoSupplier {
   optional Method check = 2;
 }
 
+message blConfig {
+  optional Method ab_source = 1;
+  optional Method config_source = 2;
+}
+
 message PlayerPreloadHolder {
   optional Class class = 1;
   optional Method get = 2;
@@ -294,6 +299,7 @@ message HookInfo {
   int64 last_update_time = 1;
   optional AppUpgrade app_upgrade = 500;
   optional Okio2 okio2 = 600;
+  optional blConfig bl_config = 601;
   optional MapIds map_ids = 2;
   int32 client_version_code = 3;
   int32 module_version_code = 4;

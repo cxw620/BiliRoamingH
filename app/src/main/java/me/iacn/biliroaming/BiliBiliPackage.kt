@@ -2043,6 +2043,26 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
                 class_ = class_ { name = checkMethod.declaringClass.name }
                 check = method { name = checkMethod.name }
             }
+            blConfig = blConfig {
+                "com.bilibili.lib.blconfig.internal.ABSource".findClassOrNull(classloader)?.declaredMethods?.firstOrNull { m ->
+                    val parameterTypes = m.parameterTypes
+                    parameterTypes.size == 2
+                            && parameterTypes[0] == String::class.java
+                            && parameterTypes[1] == java.lang.Boolean::class.java
+                            && m.returnType == java.lang.Boolean::class.java
+                }?.let {
+                    abSource = method { name = it.name }
+                }
+                "com.bilibili.lib.blconfig.internal.ConfigSource".findClassOrNull(classloader)?.declaredMethods?.firstOrNull { m ->
+                    val parameterTypes = m.parameterTypes
+                    parameterTypes.size == 2
+                            && parameterTypes[0] == String::class.java
+                            && parameterTypes[1] == String::class.java
+                            && m.returnType == String::class.java
+                }?.let {
+                    configSource = method { name = it.name }
+                }
+            }
             playerPreloadHolder = playerPreloadHolder {
                 dexHelper.findMethodUsingString(
                     "preloadKey is null",
