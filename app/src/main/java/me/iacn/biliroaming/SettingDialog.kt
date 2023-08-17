@@ -59,7 +59,9 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
         private lateinit var listView: ListView
         private lateinit var adapter: BaseAdapter
         private val hHintColor = Color.parseColor("#2196F3")
-        private val hKeys = arrayOf<String>()
+        private val hKeys = arrayOf<String>(
+            "block_follow_button"
+        )
         private var searchItems = listOf<SearchItem>()
 
         private var ListAdapter.preferenceList: List<Preference>
