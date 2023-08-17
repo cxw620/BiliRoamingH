@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.preference.*
 import android.provider.MediaStore
 import android.text.Editable
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextWatcher
@@ -57,6 +58,8 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
         private var customSubtitleDialog: CustomSubtitleDialog? = null
         private lateinit var listView: ListView
         private lateinit var adapter: BaseAdapter
+        private val hHintColor = Color.parseColor("#2196F3")
+        private val hKeys = arrayOf<String>()
         private var searchItems = listOf<SearchItem>()
 
         private var ListAdapter.preferenceList: List<Preference>
@@ -82,6 +85,10 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             }
             findPreference("version")?.summary = BuildConfig.VERSION_NAME
             findPreference("version")?.onPreferenceClickListener = this
+            val aboutGroup = findPreference("about") as? PreferenceCategory
+            findPreference("group")?.let { aboutGroup?.removePreference(it) }
+            val hiddenGroup = findPreference("hidden_group") as? PreferenceCategory
+            findPreference("force_th_comment")?.let { hiddenGroup?.removePreference(it) }
             findPreference("custom_splash")?.onPreferenceChangeListener = this
             findPreference("custom_splash_logo")?.onPreferenceChangeListener = this
             findPreference("save_log")?.summary =
@@ -106,7 +113,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             findPreference("filter_comment")?.onPreferenceClickListener = this
             checkCompatibleVersion()
             searchItems = retrieve(preferenceScreen)
-            checkUpdate()
+            if (!isLSPBuiltIn) checkUpdate()
         }
 
         @Deprecated("Deprecated in Java")
@@ -130,11 +137,18 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
                     is MultiSelectListPreference -> preference.entries
                     else -> arrayOf()
                 }.orEmpty()
+                val key = preference.key.orEmpty()
+                val title = preference.title?.appendHMark(key) ?: ""
+                val summary = (preference.summary ?: "").let {
+                    if (key == "description") it.applyHStyle() else it
+                }
+                preference.title = title
+                preference.summary = summary
                 val searchItem = SearchItem(
                     preference,
-                    preference.key.orEmpty(),
-                    preference.title ?: "",
-                    preference.summary ?: "",
+                    key,
+                    title,
+                    summary,
                     entries,
                     preference is PreferenceGroup,
                 )
@@ -144,6 +158,23 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
                     addAll(retrieve(preference))
                 }
             }
+        }
+
+        private fun CharSequence.appendHMark(key: String): CharSequence {
+            return if (key in hKeys && !this.endsWith('H')) {
+                SpannableStringBuilder(this).run {
+                    append(" H"); applyHStyle(length - 1)
+                }
+            } else this
+        }
+
+        private fun CharSequence.applyHStyle(startIdx: Int = -1) = SpannableString(this).apply {
+            val boldSpan = StyleSpan(Typeface.BOLD)
+            val colorSpan = ForegroundColorSpan(hHintColor)
+            val flags = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            val start = if (startIdx == -1) indexOf('X') else startIdx
+            setSpan(boldSpan, start, start + 1, flags)
+            setSpan(colorSpan, start, start + 1, flags)
         }
 
         private fun SearchItem.appendExtraKeywords() = when (key) {
@@ -217,25 +248,34 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             }
         }
 
+        private var mNewestTag = ""
+
         private fun checkUpdate() {
             val url = URL(context.getString(R.string.version_url))
             scope.launch {
-                val result = fetchJson(url) ?: return@launch
-                val newestVer = result.optString("name")
-                val versionName = BuildConfig.VERSION_NAME
-                if (newestVer.isNotEmpty() && versionName != newestVer) {
-                    searchItems.forEach { it.restore() }
-                    findPreference("version").summary = "${versionName}（最新版$newestVer）"
-                    (findPreference("about") as PreferenceCategory).addPreference(
-                        Preference(activity).apply {
-                            key = "update"
-                            title = context.getString(R.string.update_title)
-                            summary = result.optString("body").substringAfterLast("更新日志\r\n")
-                                .ifEmpty { context.getString(R.string.update_summary) }
-                            onPreferenceClickListener = this@PrefsFragment
-                            order = 1
-                        })
-                    searchItems = retrieve(preferenceScreen)
+                val json = fetchJsonArray(url) ?: return@launch
+                for (result in json) {
+                    val tagName = result.optString("tag_name").takeIf {
+                        it.startsWith("v")
+                    } ?: continue
+                    val newestVer = result.optString("name")
+                    val versionName = BuildConfig.VERSION_NAME
+                    if (newestVer.isNotEmpty() && versionName != newestVer) {
+                        mNewestTag = tagName
+                        searchItems.forEach { it.restore() }
+                        findPreference("version").summary = "${versionName}（最新版$newestVer）"
+                        (findPreference("about") as PreferenceCategory).addPreference(
+                            Preference(activity).apply {
+                                key = "update"
+                                title = context.getString(R.string.update_title)
+                                summary = result.optString("body")
+                                    .ifEmpty { context.getString(R.string.update_summary) }
+                                onPreferenceClickListener = this@PrefsFragment
+                                order = 1
+                            })
+                        searchItems = retrieve(preferenceScreen)
+                    }
+                    break
                 }
             }
         }
@@ -468,7 +508,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
         }
 
         private fun onUpdateClick(): Boolean {
-            val uri = Uri.parse(context.getString(R.string.update_url))
+            val uri = Uri.parse(context.getString(R.string.update_url, mNewestTag))
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
             return true

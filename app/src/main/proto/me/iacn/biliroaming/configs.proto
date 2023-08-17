@@ -277,8 +277,21 @@ message Comment3Copy {
   optional Method method = 2;
 }
 
+message AppUpgrade {
+  optional Class upgrade_utils = 1;
+  optional Method write_channel = 2;
+  optional Method write_info = 3;
+  optional Method clean_apk_dir = 4;
+  optional Class help_fragment = 5;
+  optional Class supplier = 6;
+  optional Method check = 7;
+  optional Class upgrade_info = 8;
+  optional Class version_exception = 9;
+}
+
 message HookInfo {
   int64 last_update_time = 1;
+  optional AppUpgrade app_upgrade = 500;
   optional MapIds map_ids = 2;
   int32 client_version_code = 3;
   int32 module_version_code = 4;

@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">嗶哩漫遊</string>
+    <string name="app_name">嗶哩漫遊H</string>
     <string name="xposed_description">解鎖B站港澳台番劇限制</string>
     <string name="about">關於</string>
     <string name="version">版本</string>
