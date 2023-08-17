@@ -77,6 +77,15 @@ inline fun Class<*>.hookBeforeMethod(
     override fun beforeHookedMethod(param: MethodHookParam) = param.callHooker(hooker)
 })
 
+inline fun Class<*>.hookBeforeMethod(
+    priority: Int,
+    method: String?,
+    vararg args: Any?,
+    crossinline hooker: Hooker
+) = hookMethod(method, *args, object : XC_MethodHook(priority) {
+    override fun beforeHookedMethod(param: MethodHookParam) = param.callHooker(hooker)
+})
+
 inline fun Class<*>.hookAfterMethod(
     method: String?,
     vararg args: Any?,
