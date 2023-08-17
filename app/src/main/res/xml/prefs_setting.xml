@@ -107,7 +107,9 @@
             android:title="@string/dialog_blur_background_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/miscellaneous_category">
+    <PreferenceCategory
+        android:key="misc"
+        android:title="@string/miscellaneous_category">
         <SwitchPreference
             android:key="teenagers_mode_dialog"
             android:summary="@string/teenagers_mode_dialog_summary"
@@ -543,6 +545,11 @@
                 android:action="android.intent.action.VIEW"
                 android:data="@string/afdian_url" />
         </Preference>
+
+        <Preference
+            android:key="description"
+            android:summary="@string/pref_description_summary"
+            android:title="@string/pref_description_title" />
 
         <Preference
             android:key="help"

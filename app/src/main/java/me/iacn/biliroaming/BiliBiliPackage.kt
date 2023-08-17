@@ -107,6 +107,15 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
     val shareClickResultClass by Weak { "com.bilibili.lib.sharewrapper.online.api.ShareClickResult" from mClassLoader }
     val kanbanCallbackClass by Weak { mHookInfo.kanBan.class_ from mClassLoader }
     val toastHelperClass by Weak { mHookInfo.toastHelper.class_ from mClassLoader }
+    val upgradeUtilsClass by Weak { mHookInfo.appUpgrade.upgradeUtils from mClassLoader }
+    val writeChannelMethod get() = mHookInfo.appUpgrade.writeChannel.orNull
+    val writeInfoMethod get() = mHookInfo.appUpgrade.writeInfo.orNull
+    val cleanApkDirMethod get() = mHookInfo.appUpgrade.cleanApkDir.orNull
+    val helpFragmentClass by Weak { "com.bilibili.app.preferences.fragment.HelpFragment" from mClassLoader }
+    val supplierClass by Weak { mHookInfo.appUpgrade.supplier from mClassLoader }
+    val checkMethod get() = mHookInfo.appUpgrade.check.orNull
+    val upgradeInfoClass by Weak { mHookInfo.appUpgrade.upgradeInfo from mClassLoader }
+    val versionExceptionClass by Weak { mHookInfo.appUpgrade.versionException from mClassLoader }
     val biliAccountsClass by Weak { mHookInfo.biliAccounts.class_ from mClassLoader }
     val networkExceptionClass by Weak { "com.bilibili.lib.moss.api.NetworkException" from mClassLoader }
     val brotliInputStreamClass by Weak { mHookInfo.brotliInputStream from mClassLoader }
@@ -431,6 +440,97 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
                                 && it.type == Int::class.javaPrimitiveType
                     }
                 }.forEach { ids[it.name] = it.get(null) as Int }
+            }
+            appUpgrade = appUpgrade {
+                val writeChannelMethod = dexHelper.findMethodUsingString(
+                    "Channel info has already exist.",
+                    false,
+                    -1,
+                    -1,
+                    null,
+                    -1,
+                    null,
+                    null,
+                    null,
+                    true
+                ).asSequence().firstNotNullOfOrNull {
+                    dexHelper.decodeMethodIndex(it)
+                } ?: return@appUpgrade
+                val checkMethodIndex = dexHelper.findMethodUsingString(
+                    "Do sync http request.",
+                    false,
+                    -1,
+                    -1,
+                    null,
+                    -1,
+                    null,
+                    null,
+                    null,
+                    true
+                ).firstOrNull() ?: return@appUpgrade
+                val checkMethod = dexHelper.decodeMethodIndex(checkMethodIndex) as Method
+                val upgradeInfoClass = checkMethod.returnType
+                val upgradeUtilsClass = writeChannelMethod.declaringClass
+                val writeInfoMethod = upgradeUtilsClass.methods.find { it.name == "writeInfo" }
+                    ?: dexHelper.findMethodInvoking(
+                        checkMethodIndex,
+                        -1,
+                        -1,
+                        null,
+                        -1,
+                        longArrayOf(
+                            dexHelper.encodeClassIndex(Context::class.java),
+                            dexHelper.encodeClassIndex(upgradeInfoClass)
+                        ),
+                        null,
+                        null,
+                        true
+                    ).asSequence().firstNotNullOfOrNull {
+                        dexHelper.decodeMethodIndex(it)
+                    } ?: return@appUpgrade
+                val cleanApkDirMethod = upgradeUtilsClass.methods.find { it.name == "cleanApkDir" }
+                    ?: dexHelper.findMethodInvoking(
+                        checkMethodIndex,
+                        -1,
+                        -1,
+                        null,
+                        -1,
+                        longArrayOf(
+                            dexHelper.encodeClassIndex(Context::class.java),
+                            dexHelper.encodeClassIndex(Boolean::class.javaPrimitiveType!!)
+                        ),
+                        null,
+                        null,
+                        true
+                    ).asSequence().firstNotNullOfOrNull {
+                        dexHelper.decodeMethodIndex(it)
+                    } ?: return@appUpgrade
+                val versionExceptionClass =
+                    "tv.danmaku.bili.update.internal.exception.LatestVersionException"
+                        .from(classloader) ?: dexHelper.findMethodInvoking(
+                        checkMethodIndex,
+                        -1,
+                        -1,
+                        "VL",
+                        -1,
+                        longArrayOf(dexHelper.encodeClassIndex(String::class.java)),
+                        null,
+                        null,
+                        false
+                    ).asSequence().firstNotNullOfOrNull {
+                        dexHelper.decodeMethodIndex(it)?.takeIf { m ->
+                            m is Constructor<*> && Exception::class.java.isAssignableFrom(m.declaringClass)
+                                    && m.declaringClass.name != Exception::class.java.name
+                        }?.declaringClass
+                    } ?: return@appUpgrade
+                upgradeUtils = class_ { name = upgradeUtilsClass.name }
+                writeChannel = method { name = writeChannelMethod.name }
+                writeInfo = method { name = writeInfoMethod.name }
+                cleanApkDir = method { name = cleanApkDirMethod.name }
+                supplier = class_ { name = checkMethod.declaringClass.name }
+                check = method { name = checkMethod.name }
+                upgradeInfo = class_ { name = upgradeInfoClass.name }
+                versionException = class_ { name = versionExceptionClass.name }
             }
 
             bangumiApiResponse = class_ {
