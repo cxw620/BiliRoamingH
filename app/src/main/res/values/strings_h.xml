@@ -1,4 +1,6 @@
 <resources>
     <string name="pref_description_title">说明</string>
     <string name="pref_description_summary">本模块与原版保持同步更新，并额外添加一些功能，这些功能带有 H 字样。\n内置使用可在应用内收到新的内置版更新。\n注意：本模块继承于已处于 Archived 状态的 BiliRoamingX 项目，保留了其大部分额外功能。</string>
+    <string name="block_follow_button_title">隐藏关注按钮</string>
+    <string name="block_follow_button_summary">隐藏评论、动态等右上角的关注按钮</string>
 </resources>
