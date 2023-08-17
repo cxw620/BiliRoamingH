@@ -34,6 +34,8 @@ infix fun Configs.Class.from(cl: ClassLoader) = if (hasName()) name.findClassOrN
 val Configs.Method.orNull get() = if (hasName()) name else null
 val Configs.Field.orNull get() = if (hasName()) name else null
 
+val hookInfo get() = BiliBiliPackage.instance.hookInfo
+
 class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContext: Context) {
     init {
         instance = this
@@ -46,6 +48,7 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
         Log.d(result.copy { clearMapIds() }.print())
         result
     }
+    val hookInfo get() = mHookInfo
     val bangumiApiResponseClass by Weak { mHookInfo.bangumiApiResponse from mClassLoader }
     val rxGeneralResponseClass by Weak { "com.bilibili.okretro.call.rxjava.RxGeneralResponse" from mClassLoader }
     val fastJsonClass by Weak { mHookInfo.fastJson.class_ from mClassLoader }
