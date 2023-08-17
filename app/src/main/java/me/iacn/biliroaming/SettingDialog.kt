@@ -60,7 +60,8 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
         private lateinit var adapter: BaseAdapter
         private val hHintColor = Color.parseColor("#2196F3")
         private val hKeys = arrayOf<String>(
-            "block_follow_button"
+            "block_follow_button",
+            "text_fold",
         )
         private var searchItems = listOf<SearchItem>()
 
@@ -113,6 +114,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             findPreference("customize_dynamic")?.onPreferenceClickListener = this
             findPreference("filter_search")?.onPreferenceClickListener = this
             findPreference("filter_comment")?.onPreferenceClickListener = this
+            findPreference("text_fold")?.onPreferenceClickListener = this
             checkCompatibleVersion()
             searchItems = retrieve(preferenceScreen)
             if (!isLSPBuiltIn) checkUpdate()
@@ -884,6 +886,12 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             }.show()
             return true
         }
+
+        private fun onTextFoldClick(): Boolean {
+            TextFoldDialog(activity, prefs).show()
+            return true
+        }
+
         @Deprecated("Deprecated in Java")
         override fun onPreferenceClick(preference: Preference) = when (preference.key) {
             "version" -> onVersionClick()
@@ -904,6 +912,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             "default_speed" -> onDefaultSpeedClick()
             "filter_search" -> onFilterSearchClick()
             "filter_comment" -> onFilterCommentClick()
+            "text_fold" -> onTextFoldClick()
             else -> false
         }
     }
