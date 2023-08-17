@@ -37,6 +37,8 @@ class BlConfigHook(classLoader: ClassLoader) : BaseHook(classLoader) {
         // "ff_unite_player" to true
         // "ijkplayer.enable_dynamic_cache" to false,
         "ijkplayer.cdn_cache_limit" to false,
+        "ff_unite_detail2" to true,
+        "ff_use_new_main_search" to true
     )
 
     override fun startHook() {
