@@ -137,6 +137,11 @@
             android:title="@string/long_press_playback_speed_title" />
 
         <SwitchPreference
+            android:key="disable_auto_subscribe"
+            android:summary="@string/disable_auto_subscribe_summary"
+            android:title="@string/disable_auto_subscribe_title" />
+
+        <SwitchPreference
             android:key="teenagers_mode_dialog"
             android:summary="@string/teenagers_mode_dialog_summary"
             android:title="@string/teenagers_mode_dialog_title" />
