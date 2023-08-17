@@ -22,4 +22,6 @@
     <string name="long_press_playback_speed_summary">自訂播放器長按播放速度</string>
     <string name="disable_auto_subscribe_title">禁止自動訂閱合集</string>
     <string name="disable_auto_subscribe_summary">禁止收藏有合集的影片時自動勾選訂閱合集</string>
+    <string name="add_channel_title">新增頻道按鈕</string>
+    <string name="add_channel_summary">在底欄新增頻道按鈕（重啟兩次生效）</string>
 </resources>
