@@ -96,6 +96,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     }
                     startHook(OkHttpHook(lpparam.classLoader))
                     startHook(TextFoldHook(lpparam.classLoader))
+                    startHook(PlaybackSpeedHook(lpparam.classLoader))
                     startHook(HintHook(lpparam.classLoader))
                     startHook(BangumiSeasonHook(lpparam.classLoader))
                     startHook(BangumiPlayUrlHook(lpparam.classLoader))
@@ -136,7 +137,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     startHook(VideoQualityHook(lpparam.classLoader))
                     startHook(PublishToFollowingHook(lpparam.classLoader))
                     startHook(UposReplaceHook(lpparam.classLoader))
-                    startHook(SpeedHook(lpparam.classLoader))
+                    // startHook(SpeedHook(lpparam.classLoader))
                 }
 
                 lpparam.processName.endsWith(":web") -> {
