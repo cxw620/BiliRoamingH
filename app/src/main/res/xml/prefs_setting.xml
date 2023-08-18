@@ -322,6 +322,11 @@
             android:key="add_channel"
             android:summary="@string/add_channel_summary"
             android:title="@string/add_channel_title" />
+        <SwitchPreference
+            android:dependency="hidden"
+            android:key="skin"
+            android:summary="@string/skin_summary"
+            android:title="@string/skin_title" />
         <Preference
             android:dependency="hidden"
             android:key="home_filter"
