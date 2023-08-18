@@ -391,6 +391,22 @@ message FavFolderDialog {
   optional Field check_box = 2;
 }
 
+message BiliAccountInfo {
+  optional Class class = 1;
+  optional Method get = 2;
+  optional Method is_effective_vip = 3;
+}
+
+message QualityViewHolder {
+  optional Class class = 1;
+  optional Method bind_online = 2;
+}
+
+message IPlayerController {
+  optional Class class = 1;
+  optional Method get_player = 2;
+}
+
 message HookInfo {
   int64 last_update_time = 1;
   optional AppUpgrade app_upgrade = 500;
@@ -399,6 +415,9 @@ message HookInfo {
   optional Method set_line_to_all_count = 602;
   optional PlaybackSpeed playback_speed = 603;
   optional FavFolderDialog fav_folder_dialog = 604;
+  optional BiliAccountInfo bili_account_info = 605;
+  repeated QualityViewHolder quality_view_holder = 606;
+  optional IPlayerController player_controller = 607;
   optional MapIds map_ids = 2;
   int32 client_version_code = 3;
   int32 module_version_code = 4;
