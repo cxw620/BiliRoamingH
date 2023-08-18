@@ -71,6 +71,8 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             "add_channel",
             "skin",
             "trial_vip_quality",
+            "remove_ad_extra",
+            "misc_remove_ads",
         )
         private var searchItems = listOf<SearchItem>()
 
@@ -130,6 +132,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             findPreference("default_playback_speed")?.onPreferenceClickListener = this
             findPreference("long_press_playback_speed")?.onPreferenceClickListener = this
             findPreference("skin")?.onPreferenceChangeListener = this
+            findPreference("misc_remove_ads")?.onPreferenceClickListener = this
             checkCompatibleVersion()
             searchItems = retrieve(preferenceScreen)
             if (!isLSPBuiltIn) checkUpdate()
@@ -204,6 +207,12 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
                 extra.add(context.getString(R.string.custom_subtitle_stroke_color))
                 extra.add(context.getString(R.string.custom_subtitle_stroke_width))
                 extra.add(context.getString(R.string.custom_subtitle_offset))
+            }
+
+            "misc_remove_ads" -> {
+                extra.add(context.getString(R.string.remove_search_ads_title))
+                extra.add(context.getString(R.string.remove_comment_cm_title))
+                extra.add(context.getString(R.string.block_dm_feedback_title))
             }
 
             "home_filter" -> {
@@ -1102,6 +1111,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             "playback_speed_override" -> onPlaybackSpeedOverrideClick()
             "default_playback_speed" -> onPlaybackSpeedClick(false)
             "long_press_playback_speed" -> onPlaybackSpeedClick(true)
+            "misc_remove_ads" -> run { MiscRemoveAdsDialog(activity, prefs).show(); true }
             else -> false
         }
     }
