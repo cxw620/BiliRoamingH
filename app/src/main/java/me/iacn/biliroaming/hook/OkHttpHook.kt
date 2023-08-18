@@ -11,6 +11,9 @@ class OkHttpHook(classLoader: ClassLoader) : BaseHook(classLoader) {
 
     init {
         apiHooks.add(SkinHook)
+        apiHooks.add(BannerV3AdHook)
+        if (platform != "android_hd")
+            apiHooks.add(BannerV8AdHook)
     }
 
     override fun startHook() {

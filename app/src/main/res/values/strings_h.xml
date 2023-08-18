@@ -35,4 +35,6 @@
     <string name="remove_search_ads_title">移除搜索推广</string>
     <string name="remove_comment_cm_title">移除评论页顶部推广横条</string>
     <string name="block_dm_feedback_title">屏蔽播放结束时弹幕氛围反馈</string>
+    <string name="purify_banner_ads_title">净化轮播图广告</string>
+    <string name="purify_banner_ads_summary">净化推荐、追番、影视等版块轮播图广告</string>
 </resources>

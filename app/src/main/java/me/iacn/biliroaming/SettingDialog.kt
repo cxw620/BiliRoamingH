@@ -73,6 +73,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             "trial_vip_quality",
             "remove_ad_extra",
             "misc_remove_ads",
+            "purify_banner_ads",
         )
         private var searchItems = listOf<SearchItem>()
 
