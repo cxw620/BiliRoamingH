@@ -327,6 +327,11 @@
             android:key="skin"
             android:summary="@string/skin_summary"
             android:title="@string/skin_title" />
+        <SwitchPreference
+            android:dependency="hidden"
+            android:key="trial_vip_quality"
+            android:summary="@string/trial_vip_quality_summary"
+            android:title="@string/trial_vip_quality_title" />
         <Preference
             android:dependency="hidden"
             android:key="home_filter"
