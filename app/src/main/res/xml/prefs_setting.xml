@@ -472,6 +472,11 @@
             android:key="remove_ad_extra"
             android:summary="@string/remove_ad_extra_summary"
             android:title="@string/remove_ad_extra_title" />
+        <SwitchPreference
+            android:dependency="hidden"
+            android:key="purify_banner_ads"
+            android:summary="@string/purify_banner_ads_summary"
+            android:title="@string/purify_banner_ads_title" />
         <Preference
             android:dependency="hidden"
             android:key="misc_remove_ads"
