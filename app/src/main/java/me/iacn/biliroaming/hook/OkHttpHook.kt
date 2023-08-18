@@ -10,6 +10,7 @@ class OkHttpHook(classLoader: ClassLoader) : BaseHook(classLoader) {
     private val apiHooks = mutableListOf<ApiHook>()
 
     init {
+        apiHooks.add(SkinHook)
     }
 
     override fun startHook() {

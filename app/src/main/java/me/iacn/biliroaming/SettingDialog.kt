@@ -69,6 +69,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             "long_press_playback_speed",
             "disable_auto_subscribe",
             "add_channel",
+            "skin",
         )
         private var searchItems = listOf<SearchItem>()
 
@@ -127,6 +128,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             findPreference("playback_speed_override")?.onPreferenceClickListener = this
             findPreference("default_playback_speed")?.onPreferenceClickListener = this
             findPreference("long_press_playback_speed")?.onPreferenceClickListener = this
+            findPreference("skin")?.onPreferenceChangeListener = this
             checkCompatibleVersion()
             searchItems = retrieve(preferenceScreen)
             if (!isLSPBuiltIn) checkUpdate()
@@ -408,6 +410,11 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
                         showCustomSubtitle()
                 }
 
+                "skin" -> {
+                    if (newValue as Boolean)
+                        onSkinClick()
+                }
+
                 "add_custom_button" -> {
                     if (newValue as Boolean)
                         onAddCustomButtonClick()
@@ -486,6 +493,20 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
                                 Log.toast(e.message ?: "未知错误", true, alsoLog = true)
                             }
                         }
+                    }
+                }
+
+                SKIN_IMPORT -> {
+                    val uri = data?.data
+                    if (resultCode == RESULT_CANCELED || uri == null) return
+                    try {
+                        activity.contentResolver.openInputStream(uri)
+                            ?.bufferedReader()?.use {
+                                skinInput?.setText(it.readText().trim())
+                            }
+                    } catch (e: Exception) {
+                        Log.e(e)
+                        Log.toast(e.message ?: "")
                     }
                 }
 
@@ -1005,6 +1026,53 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             return true
         }
 
+        private var skinInput: EditText? = null
+        private fun onSkinClick(): Boolean {
+            val view = EditText(activity)
+            skinInput = view
+            view.setText(sPrefs.getString("skin_json", null).orEmpty())
+            AlertDialog.Builder(activity)
+                .setTitle(R.string.skin_title)
+                .setView(view)
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton("获取", null)
+                .setNeutralButton(R.string.skin_import_from_file, null)
+                .create().apply {
+                    setOnShowListener {
+                        getButton(Dialog.BUTTON_POSITIVE)?.setOnClickListener {
+                            val text = view.text.toString().trim()
+                            if (text.runCatchingOrNull { toJSONObject() } == null) {
+                                Log.toast("请填入有效的json格式主题", true)
+                                return@setOnClickListener
+                            }
+                            sPrefs.edit().putString("skin_json", text).apply()
+                            Log.toast("导入成功 重启两次后生效", true)
+                            dismiss()
+                        }
+                        getButton(Dialog.BUTTON_NEUTRAL)?.setOnClickListener {
+                            try {
+                                startActivityForResult(
+                                    Intent.createChooser(Intent().apply {
+                                        action = Intent.ACTION_GET_CONTENT
+                                        type = "application/json"
+                                        addCategory(Intent.CATEGORY_OPENABLE)
+                                    }, "选择文件"),
+                                    SKIN_IMPORT
+                                )
+                            } catch (ex: ActivityNotFoundException) {
+                                Log.toast("文件选择器打开失败", true)
+                            }
+                        }
+                        getButton(Dialog.BUTTON_NEGATIVE)?.setOnClickListener {
+                            val uri = Uri.parse("https://github.com/Rovniced/bilibili-skin")
+                            val intent = Intent(Intent.ACTION_VIEW, uri)
+                            startActivity(intent)
+                        }
+                    }
+                }.show()
+            return true
+        }
+
         @Deprecated("Deprecated in Java")
         override fun onPreferenceClick(preference: Preference) = when (preference.key) {
             "version" -> onVersionClick()
@@ -1226,6 +1294,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             SettingDialog(context).show()
         }
 
+        const val SKIN_IMPORT = 100
         const val SPLASH_SELECTION = 0
         const val LOGO_SELECTION = 1
         const val PREF_IMPORT = 2
