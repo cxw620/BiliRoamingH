@@ -74,6 +74,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             "remove_ad_extra",
             "misc_remove_ads",
             "purify_banner_ads",
+            "filter_story",
         )
         private var searchItems = listOf<SearchItem>()
 

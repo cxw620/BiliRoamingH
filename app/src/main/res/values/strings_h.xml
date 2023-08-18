@@ -37,4 +37,6 @@
     <string name="block_dm_feedback_title">屏蔽播放结束时弹幕氛围反馈</string>
     <string name="purify_banner_ads_title">净化轮播图广告</string>
     <string name="purify_banner_ads_summary">净化推荐、追番、影视等版块轮播图广告</string>
+    <string name="filter_story_title">过滤故事模式视频</string>
+    <string name="filter_story_summary">过滤故事模式（竖屏）下的视频</string>
 </resources>
