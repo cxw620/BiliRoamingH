@@ -12,5 +12,8 @@ class AdCommonHook(classLoader: ClassLoader) : BaseHook(classLoader) {
         }
         "com.bilibili.adcommon.basic.model.SourceContent".from(mClassLoader)
             ?.replaceMethod("getIsAdLoc") { false }
+        "com.bapis.bilibili.api.ticket.v1.TicketMoss".from(mClassLoader)?.replaceMethod(
+            "getTicket", "com.bapis.bilibili.api.ticket.v1.GetTicketRequest"
+        ) { null }
     }
 }
