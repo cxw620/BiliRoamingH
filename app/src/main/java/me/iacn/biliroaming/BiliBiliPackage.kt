@@ -902,6 +902,110 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
                 checkBox = field { name = field.name }
             }
 
+            biliAccountInfo = biliAccountInfo {
+                val clazz = "com.bilibili.lib.accountinfo.BiliAccountInfo".from(classloader)
+                val get = clazz?.runCatchingOrNull { getDeclaredMethod("get") }
+                val vip = clazz?.runCatchingOrNull { getDeclaredMethod("isEffectiveVip") }
+                if (clazz != null && get != null && vip != null) {
+                    class_ = class_ { name = clazz.name }
+                    this.get = method { name = get.name }
+                    isEffectiveVip = method { name = vip.name }
+                    return@biliAccountInfo
+                }
+                val downloadActivityIdx = "tv.danmaku.bili.ui.offline.DownloadingActivity"
+                    .from(classloader)?.let { dexHelper.encodeClassIndex(it) }
+                    ?: return@biliAccountInfo
+                val vipMethod = dexHelper.findMethodUsingString(
+                    "meantime",
+                    false,
+                    -1,
+                    -1,
+                    null,
+                    downloadActivityIdx,
+                    null,
+                    null,
+                    null,
+                    true
+                ).firstOrNull()?.run {
+                    dexHelper.findMethodInvoking(
+                        this,
+                        -1,
+                        -1,
+                        "Z",
+                        -1,
+                        null,
+                        null,
+                        null,
+                        true
+                    ).firstOrNull()?.let {
+                        dexHelper.decodeMethodIndex(it)
+                    }
+                } ?: return@biliAccountInfo
+                val infoClass = vipMethod.declaringClass
+                val getMethod = infoClass.declaredMethods.find {
+                    it.isStatic && !it.isSynthetic && it.returnType == infoClass && it.parameterTypes.isEmpty()
+                } ?: return@biliAccountInfo
+                class_ = class_ { name = infoClass.name }
+                this.get = method { name = getMethod.name }
+                isEffectiveVip = method { name = vipMethod.name }
+            }
+
+            dexHelper.findMethodUsingString(
+                "last_4k_hint_show_timestamp",
+                false,
+                -1,
+                -1,
+                null,
+                -1,
+                null,
+                null,
+                null,
+                false
+            ).asSequence().mapNotNull { dexHelper.decodeMethodIndex(it)?.declaringClass }
+                .mapNotNull { c ->
+                    val m = c.declaredMethods.find { m ->
+                        m.parameterTypes.let { it.size == 5 && it[1] == Boolean::class.javaPrimitiveType }
+                    } ?: return@mapNotNull null
+                    qualityViewHolder {
+                        class_ = class_ { name = c.name }
+                        bindOnline = method { name = m.name }
+                    }
+                }.toList().let { qualityViewHolder.addAll(it) }
+
+            playerController = iPlayerController {
+                dexHelper.findMethodUsingString("ff_unite_detail2")
+                    .firstOrNull()?.let { dexHelper.decodeMethodIndex(it) }?.let { m ->
+                        class_ = class_ { name = m.declaringClass.name }
+                        getPlayer = method { name = m.name }
+                    }?.also { return@iPlayerController }
+                dexHelper.findMethodUsingString("use unite player: ")
+                    .firstOrNull()?.let { dexHelper.decodeMethodIndex(it) }?.let { m ->
+                        class_ = class_ { name = m.declaringClass.name }
+                        getPlayer = method { name = m.name }
+                    }?.also { return@iPlayerController }
+                dexHelper.findMethodUsingString("create and prepared player for shared")
+                    .firstOrNull()?.run {
+                        val clazz = dexHelper.decodeMethodIndex(this)
+                            ?.declaringClass ?: return@iPlayerController
+                        val classIdx = dexHelper.encodeClassIndex(clazz)
+                        dexHelper.findMethodInvoking(
+                            this,
+                            parameterShorty = "V",
+                            declaringClass = classIdx
+                        ).firstOrNull()?.run {
+                            dexHelper.findMethodInvoking(
+                                this,
+                                parameterShorty = "LLZL"
+                            ).firstOrNull()?.let {
+                                dexHelper.decodeMethodIndex(it)
+                            }
+                        }
+                    }?.let { m ->
+                        class_ = class_ { name = m.declaringClass.name }
+                        getPlayer = method { name = m.name }
+                    }
+            }
+
             bangumiApiResponse = class_ {
                 name = "com.bilibili.bangumi.data.common.api.BangumiApiResponse"
             }

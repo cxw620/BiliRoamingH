@@ -70,6 +70,7 @@ class SettingDialog(context: Context) : AlertDialog.Builder(context) {
             "disable_auto_subscribe",
             "add_channel",
             "skin",
+            "trial_vip_quality",
         )
         private var searchItems = listOf<SearchItem>()
 
