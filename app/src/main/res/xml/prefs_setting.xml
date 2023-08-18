@@ -469,6 +469,15 @@
             android:title="@string/customize_dynamic_title" />
         <SwitchPreference
             android:dependency="hidden"
+            android:key="remove_ad_extra"
+            android:summary="@string/remove_ad_extra_summary"
+            android:title="@string/remove_ad_extra_title" />
+        <Preference
+            android:dependency="hidden"
+            android:key="misc_remove_ads"
+            android:title="@string/misc_remove_ads_title" />
+        <SwitchPreference
+            android:dependency="hidden"
             android:key="remove_video_relate_promote"
             android:summary="@string/remove_video_relate_promote_summary"
             android:title="@string/remove_video_relate_promote_title" />
