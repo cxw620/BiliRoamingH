@@ -18,6 +18,10 @@ class JsonHook(classLoader: ClassLoader) : BaseHook(classLoader) {
         val purifyLivePopups = sPrefs.getStringSet("purify_live_popups", null) ?: setOf()
         val unlockPlayLimit = sPrefs.getBoolean("play_arc_conf", false)
 
+        val dmQoeInfoClass = "tv.danmaku.bili.videopage.player.features.qoe.DmQoeInfo"
+            .from(mClassLoader)
+        val geminiDmQoeInfoClass = "tv.danmaku.bili.videopage.player.gemini.qoe.GeminiDmQoeInfo"
+            .from(mClassLoader)
         val tabResponseClass =
             "tv.danmaku.bili.ui.main2.resource.MainResourceManager\$TabResponse".findClassOrNull(
                 mClassLoader
@@ -363,6 +367,10 @@ class JsonHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                         ?.getObjectFieldOrNullAs<MutableList<*>>("epPlayableParams")
                         ?.forEach { it?.setIntField("playableType", 0) }
                 }
+
+                dmQoeInfoClass, geminiDmQoeInfoClass -> if (hidden &&
+                    sPrefs.getBoolean("block_dm_feedback", false)
+                ) result.callMethod("setShow", false)
 
                 dmAdvertClass -> if (hidden && sPrefs.getBoolean("block_up_rcmd_ads", false))
                     result.setObjectField("ads", null)

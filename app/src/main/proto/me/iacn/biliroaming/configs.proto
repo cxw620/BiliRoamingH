@@ -407,6 +407,11 @@ message IPlayerController {
   optional Method get_player = 2;
 }
 
+message FakeIntl {
+  optional Class class = 1;
+  optional Method method = 2;
+}
+
 message HookInfo {
   int64 last_update_time = 1;
   optional AppUpgrade app_upgrade = 500;
@@ -418,6 +423,7 @@ message HookInfo {
   optional BiliAccountInfo bili_account_info = 605;
   repeated QualityViewHolder quality_view_holder = 606;
   optional IPlayerController player_controller = 607;
+  optional FakeIntl fake_intl = 608;
   optional MapIds map_ids = 2;
   int32 client_version_code = 3;
   int32 module_version_code = 4;

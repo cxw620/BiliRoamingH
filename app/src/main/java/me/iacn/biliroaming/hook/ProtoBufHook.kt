@@ -24,6 +24,7 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
 
     override fun startHook() {
         val hidden = sPrefs.getBoolean("hidden", false)
+        val removeCommentCm = sPrefs.getBoolean("remove_comment_cm", false)
         val blockLiveOrder = sPrefs.getBoolean("block_live_order", false)
         val purifyCity = sPrefs.getBoolean("purify_city", false)
         val removeHonor = sPrefs.getBoolean("remove_video_honor", false)
@@ -248,9 +249,13 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                     param.result = null
                     return@hookBeforeMethod
                 }
-                if (!blockCommentGuide) return@hookBeforeMethod
+                if (!(blockCommentGuide || removeCommentCm)) return@hookBeforeMethod
                 param.args[1] = param.args[1].mossResponseHandlerProxy { reply ->
                     reply?.runCatchingOrNull {
+                        if (removeCommentCm) {
+                            callMethod("getCm")?.callMethod("clearSourceContent")
+                        }
+                        if (!blockCommentGuide) return@mossResponseHandlerProxy
                         callMethod("getSubjectControl")?.run {
                             callMethod("clearEmptyBackgroundTextPlain")
                             callMethod("clearEmptyBackgroundTextHighlight")

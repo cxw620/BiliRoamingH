@@ -164,6 +164,7 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
     val biliConfigClass by Weak { mHookInfo.biliConfig.class_ from mClassLoader }
     val updateInfoSupplierClass by Weak { mHookInfo.updateInfoSupplier.class_ from mClassLoader }
     val latestVersionExceptionClass by Weak { "tv.danmaku.bili.update.internal.exception.LatestVersionException" from mClassLoader }
+    val fakeIntlClass by Weak { mHookInfo.fakeIntl.class_ from mClassLoader }
     val playerPreloadHolderClass by Weak { mHookInfo.playerPreloadHolder.class_ from mClassLoader }
     val playerSettingHelperClass by Weak { mHookInfo.playerSettingHelper.class_ from mClassLoader }
     val liveRtcEnableClass by Weak { mHookInfo.liveRtcHelper.liveRtcEnableClass from mClassLoader }
@@ -368,6 +369,8 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
 
     fun playerFullStoryWidgets() =
         mHookInfo.playerFullStoryWidgetList.map { it.class_.from(mClassLoader) to it.method.orNull }
+
+    fun fakeIntl() = mHookInfo.fakeIntl.method.orNull
 
     fun bangumiUniformSeasonActivityEntrance() = mHookInfo.bangumiSeasonActivityEntrance.orNull
 
@@ -2723,6 +2726,20 @@ class BiliBiliPackage constructor(private val mClassLoader: ClassLoader, mContex
                 } ?: return@updateInfoSupplier
                 class_ = class_ { name = checkMethod.declaringClass.name }
                 check = method { name = checkMethod.name }
+            }
+            fakeIntl = fakeIntl {
+                val fakeIntlClass = classesList.filter {
+                    it.startsWith("com.bilibili.adcommon.util")
+                }.firstNotNullOfOrNull { c ->
+                    c.findClass(classloader).takeIf {
+                        it.declaredMethods.count { f ->
+                            f.parameterTypes.isEmpty() && f.isStatic && f.returnType == Boolean::class.javaPrimitiveType
+                        } == 1
+                    }
+                } ?: return@fakeIntl
+                val fakeIntlMethod = fakeIntlClass.declaredMethods.firstOrNull() ?: return@fakeIntl
+                class_ = class_ { name = fakeIntlClass.name }
+                method = method { name = fakeIntlMethod.name }
             }
             blConfig = blConfig {
                 "com.bilibili.lib.blconfig.internal.ABSource".findClassOrNull(classloader)?.declaredMethods?.firstOrNull { m ->

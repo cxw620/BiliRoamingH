@@ -29,4 +29,10 @@
     <string name="skin_import_from_file">從json文件匯入</string>
     <string name="trial_vip_quality_title">無限試用會員畫質</string>
     <string name="trial_vip_quality_summary">透過將影片串流訊息設定為限免達到無限試用會員畫質目的，目前只對大部分UP主投稿影片有效，啟用後針對非會員用戶投稿影片播放會強制使用舊版播放器</string>
+    <string name="remove_ad_extra_title">增强移除廣告（汎用卡）</string>
+    <string name="remove_ad_extra_summary">通過偽裝 Play 版 APP 等手段屏蔽部分商業廣告，具體影響範圍未知。</string>
+    <string name="misc_remove_ads_title">廣告淨化雜項</string>
+    <string name="remove_search_ads_title">移除搜尋推廣</string>
+    <string name="remove_comment_cm_title">移除評論頁頂部推廣橫條</string>
+    <string name="block_dm_feedback_title">封鎖播放結束時彈幕氛圍回饋</string>
 </resources>

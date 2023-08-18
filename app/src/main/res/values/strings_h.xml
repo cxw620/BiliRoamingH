@@ -29,4 +29,10 @@
     <string name="skin_import_from_file">从json文件导入</string>
     <string name="trial_vip_quality_title">无限试用会员画质</string>
     <string name="trial_vip_quality_summary">通过将视频流信息设置为限免达到无限试用会员画质目的，目前只对大部分UP主投稿视频有效，启用后针对非会员用户投稿视频播放会强制使用旧版播放器</string>
+    <string name="remove_ad_extra_title">增强移除广告（泛用卡）</string>
+    <string name="remove_ad_extra_summary">通过伪装 Play 版 APP 等手段屏蔽部分商业广告，具体影响范围未知。</string>
+    <string name="misc_remove_ads_title">广告净化杂项</string>
+    <string name="remove_search_ads_title">移除搜索推广</string>
+    <string name="remove_comment_cm_title">移除评论页顶部推广横条</string>
+    <string name="block_dm_feedback_title">屏蔽播放结束时弹幕氛围反馈</string>
 </resources>
