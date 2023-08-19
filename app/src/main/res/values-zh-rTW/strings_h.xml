@@ -35,6 +35,7 @@
     <string name="remove_search_ads_title">移除搜尋推廣</string>
     <string name="remove_comment_cm_title">移除評論頁頂部推廣橫條</string>
     <string name="block_dm_feedback_title">封鎖播放結束時彈幕氛圍回饋</string>
+    <string name="remove_view_page_charge_btn_title">移除詳情頁充電按鈕</string>
     <string name="purify_banner_ads_title">淨化輪播圖廣告</string>
     <string name="purify_banner_ads_summary">淨化追番、影視等版塊輪播圖廣告</string>
     <string name="filter_story_title">過濾故事模式影片</string>

@@ -67,6 +67,7 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
         val blockCommentGuide = sPrefs.getBoolean("block_comment_guide", false)
         val blockVideoComment = sPrefs.getBoolean("block_video_comment", false)
         val blockViewPageAds = sPrefs.getBoolean("block_view_page_ads", false)
+        val removeViewPageChargeBtn = sPrefs.getBoolean("remove_view_page_charge_btn", false)
 
         val blockFollowButton = sPrefs.getStringSet("block_follow_button", null).orEmpty()
         if (blockFollowButton.isNotEmpty()) {
@@ -132,6 +133,9 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
             if (hidden && removeUpVipLabel) {
                 param.result.callMethod("getOwnerExt")?.callMethod("getVip")
                     ?.callMethod("clearLabel")
+            }
+            if (removeViewPageChargeBtn) {
+                param.result.callMethod("getReqUser")?.callMethod("clearElecPlusBtn")
             }
         }
 
@@ -405,6 +409,10 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
 
             if (blockViewPageAds) {
                 param.result.callMethod("clearCm")
+            }
+
+            if (removeViewPageChargeBtn) {
+                param.result.callMethod("getReqUser")?.callMethod("clearElecPlusBtn")
             }
 
             param.result.callMethod("getTab")?.run {
