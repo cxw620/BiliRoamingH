@@ -142,6 +142,10 @@
             android:title="@string/disable_auto_subscribe_title" />
 
         <SwitchPreference
+            android:key="remember_lossless_setting"
+            android:title="@string/remember_lossless_setting_title" />
+
+        <SwitchPreference
             android:key="teenagers_mode_dialog"
             android:summary="@string/teenagers_mode_dialog_summary"
             android:title="@string/teenagers_mode_dialog_title" />
