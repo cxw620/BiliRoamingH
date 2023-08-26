@@ -65,6 +65,7 @@ class BangumiPlayUrlHook(classLoader: ClassLoader) : BaseHook(classLoader) {
 
     private val defaultQn: Int?
         get() = instance.playerSettingHelperClass?.callStaticMethodAs<Int>(instance.getDefaultQn())
+    private val allowMiniPlay = sPrefs.getBoolean("allow_mini_play", false)
 
     override fun startHook() {
         if (!sPrefs.getBoolean("main_func", false)) return
@@ -797,6 +798,9 @@ class BangumiPlayUrlHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                         }
                     }
                 }
+                if (allowMiniPlay) {
+                    inlineType = 1 // InlineType.TYPE_WHOLE
+                }
             }
         } else {
             // thai
@@ -821,6 +825,9 @@ class BangumiPlayUrlHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                             canWatch = 1
                         }
                     }
+                }
+                if (allowMiniPlay) {
+                    inlineType = 1 // InlineType.TYPE_WHOLE
                 }
             }
         }
