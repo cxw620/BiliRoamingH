@@ -123,6 +123,7 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     startHook(TrialVipQualityHook(lpparam.classLoader))
                     startHook(DynamicHook(lpparam.classLoader))
                     startHook(ProtoBufHook(lpparam.classLoader))
+                    startHook(MossHook(lpparam.classLoader))
                     startHook(PlayArcConfHook(lpparam.classLoader))
                     startHook(TryWatchVipQualityHook(lpparam.classLoader))
                     startHook(AllowMiniPlayHook(lpparam.classLoader))
