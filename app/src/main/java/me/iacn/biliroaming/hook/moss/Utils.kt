@@ -447,6 +447,12 @@ object BangumiUtils {
                     typeUrl = PGC_ANY_MODEL_TYPE_URL
                     value = it.toByteString()
                 }
+                viewInfo = viewInfo.copy {
+                    if (promptBar.buttonList.all { it.actionType != 1 }) clearPromptBar()
+                    val newComprehensiveToast =  comprehensiveToast.filter { it.button.actionType != 1 }
+                    comprehensiveToast.clear()
+                    comprehensiveToast.addAll(newComprehensiveToast)
+                }
             }.toByteArray()
             response.javaClass.callStaticMethod("parseFrom", newRes)
         } ?: run {

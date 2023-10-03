@@ -231,6 +231,10 @@ message ImageInfo {optional string url = 0x1;}
 message ButtonInfo {
   optional string action_type = 0x7;
 }
+message PlaysharedButtonInfo {
+  // 1 => PAY
+  optional int32 action_type = 0x7;
+}
 
 message Report {}
 
@@ -275,6 +279,9 @@ message PopWin {
 
 message PromptBar {
   repeated ButtonInfo button = 0x6;
+}
+message PlaysharedPromptBar {
+  repeated PlaysharedButtonInfo button = 0x6;
 }
 
 message PayTip {}
@@ -360,6 +367,11 @@ message QnTrialInfo {}
 // renamed due to name collision
 message PlaysharedViewInfo {
   map<string, PlaysharedDialog> dialog_map = 0x1;
+  PlaysharedPromptBar prompt_bar = 0x2;
+  repeated ComprehensiveToast comprehensive_toast = 0x3;
+}
+message ComprehensiveToast {
+  PlaysharedButtonInfo button = 0x2;
 }
 message PlaysharedDialog {
     int32 style_type = 0x1;
@@ -367,8 +379,8 @@ message PlaysharedDialog {
     TextInfo title = 0x3;
     TextInfo subtitle = 0x4;
     ImageInfo image = 0x5;
-    repeated ButtonInfo button = 0x6;
-    ButtonInfo bottom_desc = 0x7;
+    repeated PlaysharedButtonInfo button = 0x6;
+    PlaysharedButtonInfo bottom_desc = 0x7;
     int32 count_down_sec = 0x9;
     TextInfo right_bottom_desc= 0xa;
     repeated BottomDisplay bottom_display= 0xb;
